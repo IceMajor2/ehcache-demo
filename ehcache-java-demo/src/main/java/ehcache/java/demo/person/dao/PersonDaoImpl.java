@@ -1,7 +1,7 @@
-package ehcache.java.demo.person.dao.impl;
+package ehcache.java.demo.person.dao;
 
+import ehcache.java.demo.db.dao.Dao;
 import ehcache.java.demo.person.Person;
-import ehcache.java.demo.person.dao.PersonDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-public class PersonDaoImpl implements PersonDao {
+public class PersonDaoImpl implements Dao<Person> {
 
     private final Connection connection;
 
