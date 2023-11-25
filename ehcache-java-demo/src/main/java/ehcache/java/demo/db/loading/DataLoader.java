@@ -1,4 +1,4 @@
-package ehcache.java.demo.db;
+package ehcache.java.demo.db.loading;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +12,7 @@ public class DataLoader {
         if(connection != null) {
             String path = new File(ClassLoader.getSystemClassLoader()
                     .getResource(sqlFilename).getPath()).getPath();
-            ScriptUtility.runScript(path, connection);
+            ScriptExecutor.runScript(path, connection);
             return true;
         } else {
             log.warn("Unable to execute [{}] script. No database connection found.", sqlFilename);

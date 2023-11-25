@@ -1,4 +1,4 @@
-package ehcache.java.demo.db;
+package ehcache.java.demo.db.loading;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.PathResource;
@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 import java.sql.Connection;
 
 @Slf4j
-public class ScriptUtility {
+public class ScriptExecutor {
 
     private static final boolean CONTINUE_ON_ERROR = false;
     private static final boolean IGNORE_FAILED_DROPS = false;
