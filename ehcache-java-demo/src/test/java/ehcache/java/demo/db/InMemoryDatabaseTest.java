@@ -14,7 +14,8 @@ class InMemoryDatabaseTest {
     @Test
     void whenConstructingObject_thenLoadPersonTable() {
         // arrange
-        InMemoryDatabase database = new InMemoryDatabase(true);
+        final boolean loadTestData = true;
+        InMemoryDatabase database = new InMemoryDatabase(loadTestData);
         Dao<Person> personDao = DaoFactory.createPersonDao(database.getConnection());
         List<Person> expected = List.of(
                 new Person(1L, "John", "Kowalski", 44),
