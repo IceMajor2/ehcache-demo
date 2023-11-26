@@ -16,7 +16,7 @@ class InMemoryDatabaseTest {
         // arrange
         final boolean loadTestData = true;
         InMemoryDatabase database = new InMemoryDatabase(loadTestData);
-        Dao<Person> personDao = DaoFactory.createPersonDao(database.getConnection());
+        Dao<Person> personDao = DaoFactory.createPersonDao(database.getConnection(), null);
         List<Person> expected = List.of(
                 new Person(1L, "John", "Kowalski", 44),
                 new Person(2L, "Guybrush", "Threepwood", 25),
