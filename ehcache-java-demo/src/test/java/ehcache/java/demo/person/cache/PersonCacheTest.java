@@ -27,4 +27,16 @@ class PersonCacheTest {
     void cacheShouldBeEmptyAfterInit() {
         assertThat(personCache.isEmpty()).isTrue();
     }
+
+    @Test
+    void shouldCachePersonOnFindById() {
+        // arrange
+        Person expected = new Person(1L, "John", "Kowalski", 44);
+
+        // act
+        personDao.findById(1L);
+
+        // assert
+        assertThat(personCache.get(1L)).isEqualTo(expected);
+    }
 }
