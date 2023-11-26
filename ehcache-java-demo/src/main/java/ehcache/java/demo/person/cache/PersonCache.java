@@ -7,6 +7,8 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 
+import java.util.Optional;
+
 public class PersonCache {
 
     private CacheManager cacheManager;
@@ -27,11 +29,15 @@ public class PersonCache {
                         ));
     }
 
-    public Person get(Long id) {
-        return personCache.get(id);
+    public Optional<Person> get(Long id) {
+        return Optional.ofNullable(personCache.get(id));
     }
 
     public boolean isEmpty() {
         return !personCache.iterator().hasNext();
+    }
+
+    public void put(Person person) {
+        personCache.put(person.id(), person);
     }
 }

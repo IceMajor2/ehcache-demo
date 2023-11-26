@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -22,6 +23,10 @@ public class PersonDaoImpl implements Dao<Person> {
 
     @Override
     public Person findById(Long id) {
+        Optional<Person> optPerson = personCache.get(id);
+        if (optPerson.isPresent()) {
+            return optPerson.get();
+        }
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM person WHERE id = ?")) {
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
@@ -30,7 +35,9 @@ public class PersonDaoImpl implements Dao<Person> {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 Integer age = rs.getInt("age");
-                return new Person(actualId, firstName, lastName, age);
+                Person person = new Person(actualId, firstName, lastName, age);
+                personCache.put(person);
+                return person;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
