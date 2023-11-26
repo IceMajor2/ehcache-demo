@@ -37,6 +37,6 @@ class PersonCacheTest {
         personDao.findById(1L);
 
         // assert
-        assertThat(personCache.get(1L)).isEqualTo(expected);
+        assertThat(personCache.get(1L)).hasValue(expected);
     }
 }
