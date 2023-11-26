@@ -1,10 +1,10 @@
 package ehcache.java.demo.person.cache;
 
-import ehcache.java.demo.cache.CacheHelper;
 import ehcache.java.demo.person.Person;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 
 public class PersonCache {
@@ -13,7 +13,8 @@ public class PersonCache {
     private Cache<Long, Person> personCache;
 
     public PersonCache() {
-        cacheManager = CacheHelper.getInstanceOfCacheManager();
+        cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build();
+        cacheManager.init();
         personCache = createPersonCache();
     }
 
@@ -24,6 +25,10 @@ public class PersonCache {
                                 Long.class, Person.class,
                                 ResourcePoolsBuilder.heap(10)
                         ));
+    }
+
+    public Person get(Long id) {
+        return personCache.get(id);
     }
 
     public boolean isEmpty() {
