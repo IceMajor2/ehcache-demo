@@ -1,8 +1,8 @@
 package ehcache.java.demo.db.dao;
 
 import ehcache.java.demo.person.Person;
-import ehcache.java.demo.person.cache.PersonCache;
-import ehcache.java.demo.person.dao.PersonDaoImpl;
+import ehcache.java.demo.person.PersonCache;
+import ehcache.java.demo.person.PersonDaoImpl;
 
 import java.sql.Connection;
 

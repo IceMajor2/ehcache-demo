@@ -1,7 +1,8 @@
 package ehcache.java.demo.person.dao;
 
 import ehcache.java.demo.person.Person;
-import ehcache.java.demo.person.cache.PersonCache;
+import ehcache.java.demo.person.PersonDaoImpl;
+import ehcache.java.demo.person.PersonCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

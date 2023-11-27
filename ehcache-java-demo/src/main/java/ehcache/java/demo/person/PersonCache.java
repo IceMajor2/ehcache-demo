@@ -1,6 +1,5 @@
-package ehcache.java.demo.person.cache;
+package ehcache.java.demo.person;
 
-import ehcache.java.demo.person.Person;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;

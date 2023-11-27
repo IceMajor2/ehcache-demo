@@ -4,6 +4,7 @@ import ehcache.java.demo.db.InMemoryDatabase;
 import ehcache.java.demo.db.dao.Dao;
 import ehcache.java.demo.db.dao.DaoFactory;
 import ehcache.java.demo.person.Person;
+import ehcache.java.demo.person.PersonCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

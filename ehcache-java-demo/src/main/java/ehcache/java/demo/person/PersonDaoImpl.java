@@ -1,8 +1,6 @@
-package ehcache.java.demo.person.dao;
+package ehcache.java.demo.person;
 
 import ehcache.java.demo.db.dao.Dao;
-import ehcache.java.demo.person.Person;
-import ehcache.java.demo.person.cache.PersonCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
