@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.io.Serializable;
 
-@Table("person")
+@Table("PERSON")
 public record Person(
         @Id Long id,
         String firstName,
