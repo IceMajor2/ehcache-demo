@@ -63,9 +63,4 @@ public class PersonDaoImpl implements Dao<Person> {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public void save(Person person) {
-
-    }
 }
