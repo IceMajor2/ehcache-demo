@@ -1,12 +1,31 @@
 package com.example.ehcache.spring.demo.person;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 
+import java.util.List;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Slf4j
 public class PersonServiceImpl implements PersonService {
 
+    private final PersonRepository personRepository;
+
     @Override
+    @Cacheable(
+            value = "personCache",
+            key = "#id"
+    )
     public Person getById(Long id) {
-        return null;
+        Optional<Person> optPerson = personRepository.findById(id);
+        if (optPerson.isEmpty()) {
+            return null;
+        }
+        Person person = optPerson.get();
+        log.info("Query 'getAll' in PersonService returned [{}]", person);
+        return person;
     }
 
     @Override
