@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -21,6 +22,9 @@ class PersonServiceImplTest {
 
     @Autowired
     private PersonServiceImpl personService;
+
+    @Autowired
+    private PersonRepository personRepository;
 
     private static final String PERSON_CACHE = "personCache";
 
@@ -41,6 +45,34 @@ class PersonServiceImplTest {
         // assert
         Map<Long, Person> cacheMap = getCacheAsMap();
         assertThat(cacheMap).containsOnly(expected);
+    }
+
+    @Test
+    void shouldCacheSeveralPeopleOnGetById() {
+        // act
+        personService.getById(1L);
+        personService.getById(2L);
+        personService.getById(3L);
+        personService.getById(4L);
+        personService.getById(5L);
+        personService.getById(6L);
+
+        // assert
+        Map<Long, Person> cacheMap = getCacheAsMap();
+        assertThat(cacheMap).size().isEqualTo(6);
+    }
+
+    @Test
+    void shouldCacheAllPeopleOnGetAll() {
+        // act
+        Iterable<Person> expected = personRepository.findAll();
+
+        // assert
+        Map<Long, Person> cacheMap = getCacheAsMap();
+        List<Person> actual = cacheMap.values().stream().toList();
+        assertThat(actual)
+                .withFailMessage("Did not store people")
+                .isEqualTo(expected);
     }
 
     private Map<Long, Person> getCacheAsMap() {
