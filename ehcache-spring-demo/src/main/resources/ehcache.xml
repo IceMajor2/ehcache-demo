@@ -6,8 +6,8 @@
             http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
 
     <cache alias="personCache">
-        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
-        <value-type>java.util.Map</value-type>
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.example.ehcache.spring.demo.person.Person</value-type>
         <expiry>
             <ttl unit="hours">1</ttl>
         </expiry>
