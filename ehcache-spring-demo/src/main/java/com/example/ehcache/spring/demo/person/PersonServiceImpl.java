@@ -16,10 +16,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
 
     @Override
-    @Cacheable(
-            value = "personCache",
-            key = "#id"
-    )
+    @Cacheable(value = "personCache")
     public Person getById(Long id) {
         Optional<Person> optPerson = personRepository.findById(id);
         if (optPerson.isEmpty()) {
@@ -31,7 +28,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Cacheable("personCache")
     public List<Person> getAll() {
-        return null;
+        List<Person> people = personRepository.findAll();
+        log.info("Query 'getAll' in PersonService returned {} rows", people.size());
+        return people;
     }
 }
