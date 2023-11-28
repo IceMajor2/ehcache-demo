@@ -1,9 +1,9 @@
 package com.example.ehcache.spring.demo.person;
 
-import java.util.List;
+import java.util.Map;
 
 public interface PersonService {
 
     Person getById(Long id);
-    List<Person> getAll();
+    Map<Long, Person> getAll();
 }
