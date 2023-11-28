@@ -24,6 +24,9 @@ class PersonServiceImplTest {
     private PersonServiceImpl personService;
 
     @Autowired
+    private org.springframework.cache.Cache cache;
+
+    @Autowired
     private PersonRepository personRepository;
 
     private static final String PERSON_CACHE = "personCache";
@@ -45,6 +48,13 @@ class PersonServiceImplTest {
         // assert
         Map<Long, Person> cacheMap = getCacheAsMap();
         assertThat(cacheMap).containsOnly(expected);
+    }
+
+    @Test
+    void should() {
+        personService.getById(1L);
+        Object o = cache.get(1L).get();
+        System.out.println(o);
     }
 
     @Test
@@ -70,9 +80,21 @@ class PersonServiceImplTest {
         // assert
         Map<Long, Person> cacheMap = getCacheAsMap();
         List<Person> actual = cacheMap.values().stream().toList();
-        assertThat(actual)
-                .withFailMessage("Did not store people")
-                .isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldCachePersonOnCachePerson() {
+        // arrange
+        Person expectedPerson = new Person(1L, "John", "Kowalski", 44);
+        Map.Entry<Long, Person> expected = Map.entry(1L, expectedPerson);
+
+        // act
+        personService.cachePerson(personRepository.findById(1L).get());
+
+        // assert
+        Map<Long, Person> cacheMap = getCacheAsMap();
+        assertThat(cacheMap).containsOnly(expected);
     }
 
     private Map<Long, Person> getCacheAsMap() {
