@@ -1,14 +1,13 @@
 package com.example.ehcache.spring.demo.person;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.interceptor.SimpleKey;
 
 import javax.cache.Cache;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -16,12 +15,7 @@ import java.util.stream.StreamSupport;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class PersonServiceImplTest {
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    private Cache<SimpleKey, Map<Long, Person>> personCache = (Cache<SimpleKey, Map<Long, Person>>) cacheManager.getCache(PERSON_CACHE).getNativeCache();
+class PersonCacheTest {
 
     @Autowired
     private PersonServiceImpl personService;
@@ -29,10 +23,20 @@ class PersonServiceImplTest {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    private Cache<Long, Person> SUT; // personCache
+
     private static final String PERSON_CACHE = "personCache";
 
     @BeforeEach
     void setUp() {
+        SUT = (Cache<Long, Person>) cacheManager.getCache(PERSON_CACHE).getNativeCache();
+    }
+
+    @AfterEach
+    void tearDown() {
         cacheManager.getCache(PERSON_CACHE).clear();
     }
 
@@ -46,8 +50,8 @@ class PersonServiceImplTest {
         personService.getById(1L);
 
         // assert
-        Map<SimpleKey, Map<Long, Person>> cacheMap = getCacheAsMap(personCache);
-        assertThat(cacheMap).containsOnly(expected);
+        Map<Long, Person> nestedMap = getCacheMap(SUT);
+        assertThat(nestedMap).containsOnly(expected);
     }
 
     @Test
@@ -61,38 +65,12 @@ class PersonServiceImplTest {
         personService.getById(6L);
 
         // assert
-        Map<SimpleKey, Map<Long, Person>> cacheMap = getCacheAsMap(personCache);
+        Map<Long, Person> cacheMap = getCacheMap(SUT);
         assertThat(cacheMap).size().isEqualTo(6);
     }
 
-    @Test
-    void shouldCacheAllPeopleOnGetAll() {
-        // act
-        Iterable<Person> expected = personRepository.findAll();
-
-        // assert
-        Map<SimpleKey, Map<Long, Person>> cacheMap = getCacheAsMap(personCache);
-        List<Person> actual = cacheMap.values().stream().toList();
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @Test
-    void shouldCachePersonOnCachePerson() {
-        // arrange
-//        Person expectedPerson = new Person(1L, "John", "Kowalski", 44);
-//        Map.Entry<Long, Person> expected = Map.entry(1L, expectedPerson);
-//
-//        // act
-//        personService.cachePerson(personRepository.findById(1L).get());
-//
-//        // assert
-//        Map<Long, Person> cacheMap = getCacheAsMap();
-//        assertThat(cacheMap).containsOnly(expected);
-    }
-
-    private Map<SimpleKey, Map<Long, Person>> getCacheAsMap(Cache<SimpleKey, Map<Long, Person>> personCache) {
-        Map<SimpleKey, Map<Long, Person>> cacheMap = StreamSupport.stream(personCache.spliterator(), false)
+    private Map<Long, Person> getCacheMap(Cache<Long, Person> personCache) {
+        return StreamSupport.stream(personCache.spliterator(), false)
                 .collect(Collectors.toMap(Cache.Entry::getKey, Cache.Entry::getValue));
-        return cacheMap;
     }
 }
